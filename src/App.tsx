@@ -8,6 +8,7 @@ import {
   // Torus,
   // MeshDistortMaterial,
 } from "@react-three/drei";
+import { Analytics } from "@vercel/analytics/react";
 
 // 1. Particle Field (The Stars)
 const ParticleField = () => {
@@ -224,6 +225,8 @@ export default function App() {
         &gt; SYSTEM: NONYDEV_OS <br />
         &gt; STATUS: INITIALIZING_CHALLENGE_2026...
       </div>
+
+      <Analytics />
     </div>
   );
 }
