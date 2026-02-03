@@ -32,6 +32,18 @@ const ProjectHub = () => {
 
   return (
     <Html position={[0, 0, 0]} center distanceFactor={10}>
+      <style>
+        {`
+          @keyframes glowPulse {
+            0% { box-shadow: 0 0 5px #ffea00; transform: scale(1); }
+            50% { box-shadow: 0 0 15px #ffea00; transform: scale(1.05); }
+            100% { box-shadow: 0 0 5px #ffea00; transform: scale(1); }
+          }
+          .active-badge {
+            animation: glowPulse 2s infinite ease-in-out;
+          }
+        `}
+      </style>
       <div style={{
         background: 'rgba(0, 0, 0, 0.85)',
         color: '#00f3ff',
@@ -43,7 +55,8 @@ const ProjectHub = () => {
         fontSize: '11px',
         boxShadow: `0 0 ${20 + (journeyPercentage / 5)}px rgba(0, 243, 255, 0.15)`,
         transition: 'all 0.3s ease',
-        backdropFilter: 'blur(4px)'
+        backdropFilter: 'blur(4px)',
+        position: 'relative'
       }}>
         <div style={{ borderBottom: '1px solid #00f3ff', paddingBottom: '10px', marginBottom: '15px', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}>
           <span>&gt; MISSION_MAP_v2</span>
@@ -53,25 +66,46 @@ const ProjectHub = () => {
         {projects.map((p) => {
           const isActive = currentDay >= p.range[0] && currentDay <= p.range[1];
           const isFinished = currentDay > p.range[1];
+          const isPending = currentDay < p.range[0];
+
+          // Color Logic: Active=Yellow, Finished=Cyan, Pending=Purple
+          const statusColor = isActive ? '#ffea00' : (isFinished ? '#00f3ff' : '#bd00ff');
+          const borderColor = isActive ? '#ffea00' : (isFinished ? '#00f3ff' : '#331a4d');
 
           return (
             <div key={p.id} style={{ 
               marginBottom: '12px', 
-              borderLeft: isActive ? '3px solid #ffea00' : '2px solid #333', 
+              borderLeft: `2px solid ${borderColor}`, 
               paddingLeft: '12px',
-              opacity: isActive || isFinished ? 1 : 0.4
+              opacity: isPending ? 0.6 : 1,
+              transition: 'all 0.4s ease'
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ 
                   fontWeight: 'bold', 
-                  color: isActive ? '#ffea00' : (isFinished ? '#00f3ff' : '#666')
+                  color: statusColor
                 }}>
                   {p.id}: {p.name}
                 </span>
-                {isActive && <span style={{ fontSize: '8px', background: '#ffea00', color: '#000', padding: '1px 4px', borderRadius: '2px', fontWeight: 'bold' }}>ACTIVE</span>}
-                {isFinished && <span style={{ color: '#00f3ff' }}>✓</span>}
+                {isActive && (
+                  <span className="active-badge" style={{ 
+                    fontSize: '8px', background: '#ffea00', color: '#000', padding: '1px 4px', borderRadius: '2px', fontWeight: 'bold' 
+                  }}>
+                    ACTIVE
+                  </span>
+                )}
+                {isFinished && <span style={{ color: '#00f3ff', fontWeight: 'bold' }}>✓</span>}
+                {isPending && (
+                  <span style={{ 
+                    fontSize: '8px', color: '#bd00ff', border: '1px solid #bd00ff', padding: '0px 3px', borderRadius: '2px' 
+                  }}>
+                    PENDING
+                  </span>
+                )}
               </div>
-              <div style={{ fontSize: '10px', color: '#888', marginTop: '2px' }}>{p.date}</div>
+              <div style={{ fontSize: '10px', color: isPending ? '#4b306b' : '#888', marginTop: '2px' }}>
+                {p.date}
+              </div>
             </div>
           );
         })}
@@ -86,7 +120,8 @@ const ProjectHub = () => {
               width: `${journeyPercentage}%`, 
               height: '100%', 
               background: 'linear-gradient(90deg, #00f3ff, #ffea00)',
-              boxShadow: '0 0 10px #00f3ff'
+              boxShadow: '0 0 10px #00f3ff',
+              transition: 'width 1s ease-in-out'
             }}></div>
           </div>
         </div>
