@@ -7,6 +7,9 @@ import {
 } from "@react-three/drei";
 import { Analytics } from "@vercel/analytics/react";
 
+
+
+
 const ParticleField = () => {
   const starsRef = useRef<any>(null!);
   useFrame(() => {
@@ -36,6 +39,26 @@ const ProjectHub = () => {
   ];
 
   return (
+
+    
+  <div style={{ width: "100vw", height: "100vh", background: "#000" }}>
+    <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
+      <color attach="background" args={["#000000"]} />
+      <ambientLight intensity={1} />
+      {/* Removed 'config' prop to fix TS2322 error */}
+      <PresentationControls 
+        global 
+        rotation={[0, 0, 0]} 
+        polar={[-0.1, 0.1]} 
+        azimuth={[-0.1, 0.1]}
+      >
+        <Countdown3D />
+      </PresentationControls>
+      <ParticleField />
+    </Canvas>
+    <Analytics />
+  </div>
+
     <Html position={[0, 0, 0]} center distanceFactor={10}>
       <div style={{
         background: 'rgba(0, 0, 0, 0.85)',
