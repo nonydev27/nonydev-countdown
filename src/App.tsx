@@ -1,14 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import {
-  Stars,
-  PresentationControls,
-  Html
-} from "@react-three/drei";
+import { Stars, PresentationControls, Html } from "@react-three/drei";
 import { Analytics } from "@vercel/analytics/react";
-
-
-
 
 const ParticleField = () => {
   const starsRef = useRef<any>(null!);
@@ -19,7 +12,6 @@ const ParticleField = () => {
 };
 
 const ProjectHub = () => {
-  // 1. Automatic Day Calculation
   const startDate = new Date("2026-01-25T00:00:00");
   const today = new Date();
   const diffTime = Math.max(0, today.getTime() - startDate.getTime());
@@ -39,26 +31,6 @@ const ProjectHub = () => {
   ];
 
   return (
-
-    
-  <div style={{ width: "100vw", height: "100vh", background: "#000" }}>
-    <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
-      <color attach="background" args={["#000000"]} />
-      <ambientLight intensity={1} />
-      {/* Removed 'config' prop to fix TS2322 error */}
-      <PresentationControls 
-        global 
-        rotation={[0, 0, 0]} 
-        polar={[-0.1, 0.1]} 
-        azimuth={[-0.1, 0.1]}
-      >
-        <Countdown3D />
-      </PresentationControls>
-      <ParticleField />
-    </Canvas>
-    <Analytics />
-  </div>
-
     <Html position={[0, 0, 0]} center distanceFactor={10}>
       <div style={{
         background: 'rgba(0, 0, 0, 0.85)',
@@ -126,7 +98,6 @@ const ProjectHub = () => {
 const Countdown3D = () => {
   const { viewport } = useThree();
   const mobileScale = viewport.width < 6 ? 0.75 : 1;
-
   return (
     <group scale={mobileScale}>
       <ProjectHub />
@@ -146,7 +117,7 @@ export default function App() {
           setTimeout(() => setIsBooting(false), 500);
           return 100;
         }
-        return prev + 2; // Slightly faster boot
+        return prev + 2;
       });
     }, 30); 
     return () => clearInterval(interval);
@@ -169,7 +140,12 @@ export default function App() {
       <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
         <color attach="background" args={["#000000"]} />
         <ambientLight intensity={1} />
-        <PresentationControls global rotation={[0, 0, 0]} polar={[-0.1, 0.1]} azimuth={[-0.1, 0.1]} config={{ mass: 2, tension: 400 }}>
+        <PresentationControls 
+          global 
+          rotation={[0, 0, 0]} 
+          polar={[-0.1, 0.1]} 
+          azimuth={[-0.1, 0.1]}
+        >
           <Countdown3D />
         </PresentationControls>
         <ParticleField />
