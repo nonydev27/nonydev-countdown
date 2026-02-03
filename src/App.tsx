@@ -1,12 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
-  Text,
-  Float,
   Stars,
   PresentationControls,
-  Torus,
-  MeshDistortMaterial,
   Html
 } from "@react-three/drei";
 import { Analytics } from "@vercel/analytics/react";
@@ -26,10 +22,9 @@ const ProjectHub = () => {
   const diffTime = Math.max(0, today.getTime() - startDate.getTime());
   const currentDay = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
   
-  const totalDays = 101; // Jan 25 to May 05
+  const totalDays = 101; 
   const journeyPercentage = Math.min(100, Math.round((currentDay / totalDays) * 100));
 
-  // 2. Automated Project Timeline
   const projects = [
     { id: "P-1", name: "Calculator", range: [1, 10], date: "Jan 25 - Feb 03" },
     { id: "P-2", name: "QR Generator", range: [11, 12], date: "Feb 04 - Feb 05" },
@@ -41,20 +36,21 @@ const ProjectHub = () => {
   ];
 
   return (
-    <Html position={[3.8, 0, 0]} distanceFactor={10}>
+    <Html position={[0, 0, 0]} center distanceFactor={10}>
       <div style={{
         background: 'rgba(0, 0, 0, 0.85)',
         color: '#00f3ff',
-        padding: '20px',
-        borderRadius: '10px',
+        padding: '25px',
+        borderRadius: '12px',
         border: '1px solid #00f3ff',
         fontFamily: 'monospace',
-        width: '300px',
+        width: '320px',
         fontSize: '11px',
-        boxShadow: `0 0 ${20 + (journeyPercentage / 5)}px rgba(0, 243, 255, 0.25)`,
-        transition: 'all 0.3s ease'
+        boxShadow: `0 0 ${20 + (journeyPercentage / 5)}px rgba(0, 243, 255, 0.15)`,
+        transition: 'all 0.3s ease',
+        backdropFilter: 'blur(4px)'
       }}>
-        <div style={{ borderBottom: '1px solid #00f3ff', paddingBottom: '8px', marginBottom: '12px', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ borderBottom: '1px solid #00f3ff', paddingBottom: '10px', marginBottom: '15px', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}>
           <span>&gt; MISSION_MAP_v2</span>
           <span style={{ color: '#ffea00' }}>DAY_{currentDay}</span>
         </div>
@@ -68,16 +64,16 @@ const ProjectHub = () => {
               marginBottom: '12px', 
               borderLeft: isActive ? '3px solid #ffea00' : '2px solid #333', 
               paddingLeft: '12px',
-              opacity: isActive || isFinished ? 1 : 0.5
+              opacity: isActive || isFinished ? 1 : 0.4
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ 
                   fontWeight: 'bold', 
-                  color: isActive ? '#ffea00' : (isFinished ? '#00f3ff' : '#444')
+                  color: isActive ? '#ffea00' : (isFinished ? '#00f3ff' : '#666')
                 }}>
                   {p.id}: {p.name}
                 </span>
-                {isActive && <span style={{ fontSize: '8px', background: '#ffea00', color: '#000', padding: '1px 4px', borderRadius: '2px' }}>ACTIVE</span>}
+                {isActive && <span style={{ fontSize: '8px', background: '#ffea00', color: '#000', padding: '1px 4px', borderRadius: '2px', fontWeight: 'bold' }}>ACTIVE</span>}
                 {isFinished && <span style={{ color: '#00f3ff' }}>✓</span>}
               </div>
               <div style={{ fontSize: '10px', color: '#888', marginTop: '2px' }}>{p.date}</div>
@@ -85,17 +81,17 @@ const ProjectHub = () => {
           );
         })}
 
-        <div style={{ marginTop: '20px', paddingTop: '10px', borderTop: '1px solid #333' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', fontSize: '9px' }}>
-            <span>TOTAL_PROGRESS</span>
+        <div style={{ marginTop: '25px', paddingTop: '15px', borderTop: '1px solid #333' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '9px' }}>
+            <span>TOTAL_COMPLETION_OS</span>
             <span style={{ color: '#ffea00' }}>{journeyPercentage}%</span>
           </div>
-          <div style={{ width: '100%', height: '6px', background: '#111', borderRadius: '3px', border: '1px solid #333', overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: '8px', background: '#111', borderRadius: '4px', border: '1px solid #333', overflow: 'hidden' }}>
             <div style={{ 
               width: `${journeyPercentage}%`, 
               height: '100%', 
               background: 'linear-gradient(90deg, #00f3ff, #ffea00)',
-              boxShadow: '0 0 8px #00f3ff'
+              boxShadow: '0 0 10px #00f3ff'
             }}></div>
           </div>
         </div>
@@ -105,42 +101,12 @@ const ProjectHub = () => {
 };
 
 const Countdown3D = () => {
-  // Automatic central status text
-  const startDate = new Date("2026-01-25T00:00:00");
-  const today = new Date();
-  const diffTime = Math.max(0, today.getTime() - startDate.getTime());
-  const currentDay = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
-
-  const ringRef = useRef<any>(null!);
   const { viewport } = useThree();
-  const mobileScale = viewport.width < 6 ? 0.5 : 1;
-
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime();
-    if (ringRef.current) {
-      ringRef.current.rotation.z = t * 0.2;
-      ringRef.current.scale.setScalar(1 + Math.sin(t) * 0.05);
-    }
-  });
+  const mobileScale = viewport.width < 6 ? 0.75 : 1;
 
   return (
     <group scale={mobileScale}>
-      <Torus ref={ringRef} args={[2.6, 0.012, 16, 100]} rotation={[Math.PI / 2, 0, 0]}>
-        <MeshDistortMaterial color="#00f3ff" speed={2} distort={0.3} emissive="#00f3ff" emissiveIntensity={2} />
-      </Torus>
-
-      <Float speed={3} rotationIntensity={0.5} floatIntensity={1}>
-        <Text fontSize={0.6} color="#00f3ff" anchorX="center" anchorY="middle">
-          {`DAY ${currentDay} / 100`}
-          <meshStandardMaterial emissive="#00f3ff" emissiveIntensity={2} />
-        </Text>
-        <Text position={[0, -0.9, 0]} fontSize={0.14} color="#ffffff" maxWidth={3.5} textAlign="center">
-          {"🛠️ Debugging the Present, Compiling the Future 🌍"}
-        </Text>
-        <Text position={[0, 0.9, 0]} fontSize={0.4}>{"👾"}</Text>
-      </Float>
-
-      {viewport.width > 7 && <ProjectHub />}
+      <ProjectHub />
     </group>
   );
 };
@@ -157,9 +123,9 @@ export default function App() {
           setTimeout(() => setIsBooting(false), 500);
           return 100;
         }
-        return prev + 1;
+        return prev + 2; // Slightly faster boot
       });
-    }, 40); 
+    }, 30); 
     return () => clearInterval(interval);
   }, []);
 
@@ -167,21 +133,20 @@ export default function App() {
     return (
       <div style={{ height: "100vh", width: "100vw", background: "#000", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", fontFamily: "monospace", color: "#00f3ff" }}>
         <div style={{ marginBottom: "15px", letterSpacing: "5px" }}>NONYDEV_OS v1.0</div>
-        <div style={{ width: "250px", height: "4px", border: "1px solid #333", background: "#111" }}>
+        <div style={{ width: "200px", height: "2px", border: "1px solid #333", background: "#111" }}>
           <div style={{ width: `${progress}%`, height: "100%", background: "#00f3ff", boxShadow: "0 0 10px #00f3ff" }}></div>
         </div>
-        <div style={{ marginTop: "12px" }}>{progress}% LOADED</div>
+        <div style={{ marginTop: "12px", fontSize: '10px' }}>INITIALIZING_SYSTEM_{progress}%</div>
       </div>
     );
   }
 
   return (
     <div style={{ width: "100vw", height: "100vh", background: "#000" }}>
-      <Canvas camera={{ position: [0, 0, 9], fov: 55 }}>
+      <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
         <color attach="background" args={["#000000"]} />
-        <ambientLight intensity={1.2} />
-        <pointLight position={[10, 10, 10]} intensity={2.5} />
-        <PresentationControls global rotation={[0.1, 0, 0]} polar={[-0.2, 0.2]} azimuth={[-0.2, 0.2]}>
+        <ambientLight intensity={1} />
+        <PresentationControls global rotation={[0, 0, 0]} polar={[-0.1, 0.1]} azimuth={[-0.1, 0.1]} config={{ mass: 2, tension: 400 }}>
           <Countdown3D />
         </PresentationControls>
         <ParticleField />
